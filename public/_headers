@@ -1,0 +1,17 @@
+# Response headers for Cloudflare Workers static assets (wrangler.jsonc assets.directory = ./dist).
+# Astro content-hashes every emitted file under /_astro/, so a URL's bytes never change
+# under it: cache those for a year and skip revalidation entirely.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Stable-name files keep their URL across releases, so give them a day of freshness
+# instead of the default max-age=0, must-revalidate. HTML, robots.txt and sitemaps
+# deliberately keep the default.
+/og.png
+  Cache-Control: public, max-age=86400
+
+/og.svg
+  Cache-Control: public, max-age=86400
+
+/favicon.svg
+  Cache-Control: public, max-age=86400
