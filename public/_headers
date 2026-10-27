@@ -1,3 +1,8 @@
+# HSTS for every response (Refs #7). Browsers ignore it over plain HTTP, so it only takes
+# effect once the zone redirects http:// to https:// (a Cloudflare setting, not this file).
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
 # Response headers for Cloudflare Workers static assets (wrangler.jsonc assets.directory = ./dist).
 # Astro content-hashes every emitted file under /_astro/, so a URL's bytes never change
 # under it: cache those for a year and skip revalidation entirely.
