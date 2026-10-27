@@ -1,9 +1,18 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "getfoundtrades",
+  "main": "src/worker.ts",
   "compatibility_date": "2026-07-01",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
-  }
+    "not_found_handling": "404-page",
+    // Only the API runs Worker code; every other path is served straight from ./dist,
+    // so public/_headers keeps applying to the pages.
+    "run_worker_first": ["/api/*"]
+  },
+  // Waitlist signups (src/worker.ts). No id: wrangler deploy creates the namespace on the
+  // first deploy and binds it to this Worker from then on.
+  "kv_namespaces": [{ "binding": "WAITLIST" }],
+  // Per-IP cap on /api/waitlist. namespace_id is an account-scoped label, not a resource id.
+  "ratelimits": [{ "name": "WAITLIST_LIMITER", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } }]
 }
