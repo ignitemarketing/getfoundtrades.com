@@ -15,3 +15,16 @@
 
 /favicon.svg
   Cache-Control: public, max-age=86400
+
+# Security headers for every response (Refs #8). CSS is inlined into <style> (astro.config.mjs
+# inlineStylesheets) and index.astro uses style attributes, so styles need 'unsafe-inline'. Fonts,
+# images and the waitlist script are same-origin (assetsInlineLimit: 0 keeps the script an external
+# /_astro/ file). challenges.cloudflare.com is the Turnstile widget on the waitlist form. The JSON-LD
+# <script type="application/ld+json"> is a data block and is not subject to script-src.
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Frame-Options: DENY
